@@ -9,12 +9,11 @@ public class RunState : IPlayerState
     }
     public void Enter(PlayerController p)
     {
-        Debug.Log("Bruh, I'm running");
+        Debug.Log("I'm running");
     }
     public void Exit(PlayerController p)
     {
-        Debug.Log("Bruh I stopped running");
-
+        Debug.Log("I stopped running");
     }
     public void ForceExit(PlayerController p)
     {
@@ -26,22 +25,44 @@ public class RunState : IPlayerState
     }
     public void HandleInput(PlayerController p)
     {
-        float input = Input.GetAxis("Horizontal");
-        float jump = Input.GetAxis("Jump");
+        float inputx = Input.GetAxisRaw("Horizontal");
+        float inputy = Input.GetAxisRaw("Vertical");
+        bool attack = Input.GetButtonDown("Fire1");
+        bool jump = Input.GetButtonDown("Jump");
+
         //Change direction
-        if (input * _direction < 0)
+        if (inputx * _direction < 0)
         {
             p.rig.linearVelocity = new Vector2(0, p.rig.linearVelocity.y);
-            p.SetState(new RunState(input > 0));
+            p.SetState(new RunState(inputx > 0));
+            return;
         }
-        if(Mathf.Abs(input) < 0.01f)
+
+        if (Mathf.Abs(inputx) < 0.01f)
         {
             p.rig.linearVelocity = new Vector2(0, p.rig.linearVelocity.y);
             p.SetState(new IdleState());
+            return;
         }
-        if(jump > 0)
+
+        // Only allow jumping if the ground check reports grounded (null-safe)
+        bool grounded = p.groundCheck != null && p.groundCheck.IsGrounded();
+        if (jump && grounded)
         {
             p.SetState(new JumpState());
+            return;
         }
+
+        // Attacks: mirror Idle behavior (passes input vector)
+        if (attack)
+        {
+            p.SetState(new AttackState(inputx, inputy));
+            return;
+        }
+    }
+
+    public override string ToString()
+    {
+        return _direction >= 0 ? "RunState(Right)" : "RunState(Left)";
     }
 }

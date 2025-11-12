@@ -20,20 +20,37 @@ public class IdleState : IPlayerState
     }
     public void HandleInput(PlayerController p)
     {
-        float input = Input.GetAxis("Horizontal");
-        float jump = Input.GetAxis("Jump");
+        float inputx = Input.GetAxisRaw("Horizontal");
+        float inputy = Input.GetAxisRaw("Vertical");
+        bool attack = Input.GetButtonDown("Fire1");
+        bool jump = Input.GetButtonDown("Jump");
 
-        if (input < 0)
+        if (inputx < 0)
         {
             p.SetState(new RunState(false));
+            return;
         }
-        else if(input > 0)
+        else if(inputx > 0)
         {
             p.SetState(new RunState(true));
+            return;
         }
-        if (jump > 0)
+
+        bool grounded = p.groundCheck != null && p.groundCheck.IsGrounded();
+        if (jump && grounded)
         {
             p.SetState(new JumpState());
+            return;
         }
+
+        if(attack)
+        {
+            p.SetState(new AttackState(inputx, inputy));
+        }
+    }
+
+    public override string ToString()
+    {
+        return "IdleState";
     }
 }

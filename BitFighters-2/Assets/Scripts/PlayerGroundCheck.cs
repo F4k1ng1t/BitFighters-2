@@ -6,8 +6,7 @@ public class PlayerGroundCheck : MonoBehaviour
     public Transform checkPoint;      // Child object at the player's feet
     public LayerMask groundLayer;     // Layer of ground objects
     public float rayLength = 0.1f;    // How far down to check
-
-    // Optional: debug visuals
+    
     private void OnDrawGizmos()
     {
         if (checkPoint == null) return;
@@ -20,7 +19,6 @@ public class PlayerGroundCheck : MonoBehaviour
     public bool IsGrounded()
     {
         if (checkPoint == null) return false;
-
         RaycastHit2D hit = Physics2D.Raycast(checkPoint.position, Vector2.down, rayLength, groundLayer);
         return hit.collider != null;
     }

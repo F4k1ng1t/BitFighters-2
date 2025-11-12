@@ -7,5 +7,6 @@ public interface IPlayerState
     void ForceExit(PlayerController player);
     void Update(PlayerController player);
     void HandleInput(PlayerController player);
+    string ToString();
 
 }

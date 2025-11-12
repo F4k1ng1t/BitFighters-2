@@ -1,4 +1,5 @@
 using NUnit.Framework.Interfaces;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,12 +12,14 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
     public double percent = 0;
 
+    public TextMeshProUGUI tmp;
+
     private IPlayerState currentState;
     private void Start()
     {
         rig = this.GetComponent<Rigidbody2D>();
         groundCheck = GetComponent<PlayerGroundCheck>();
-        SetState(new IdleState());
+        SetState(new AirIdleState());
     }
     private void Update()
     {
@@ -31,5 +34,6 @@ public class PlayerController : MonoBehaviour
         }
         currentState = newState;
         currentState.Enter(this);
+        tmp.text = newState.ToString();
     }
 }
