@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class JumpState : IPlayerState
 {
-    // small delay so the state change happens after Enter returns (avoids nested SetState timing issues)
+    // small delay so the state change happens after Enter returns
     private const float TransitionDelay = 0.05f;
     private float _timer;
 

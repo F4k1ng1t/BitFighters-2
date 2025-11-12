@@ -37,14 +37,12 @@ public class AttackState : IPlayerState
 
     public void Update(PlayerController p)
     {
-        // Update grounded buffer while in attack. This makes landing during the attack count.
         if (p.groundCheck != null && p.groundCheck.IsGrounded())
             wasGrounded = true;
 
         timer -= Time.deltaTime;
         if (timer <= 0f)
         {
-            // Use the buffered grounded value so brief physics timing differences don't force AirIdle
             if (wasGrounded)
             {
                 p.SetState(new IdleState());

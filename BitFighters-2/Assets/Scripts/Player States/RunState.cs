@@ -53,7 +53,6 @@ public class RunState : IPlayerState
             return;
         }
 
-        // Attacks: mirror Idle behavior (passes input vector)
         if (attack)
         {
             p.SetState(new AttackState(inputx, inputy));
